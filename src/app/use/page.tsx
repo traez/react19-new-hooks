@@ -132,7 +132,7 @@ export default function UsePage() {
                       <span className="text-blue-600">import</span>{" "}
                       <span className="text-purple-600">{`use`}</span>{" "}
                       <span className="text-blue-600">from</span>{" "}
-                      <span className="text-green-600">'react'</span>;
+                      <span className="text-green-600">&apos;react&apos;</span>;
                     </div>
                     <div className="mt-2">
                       <span className="text-blue-600">const</span>{" "}
