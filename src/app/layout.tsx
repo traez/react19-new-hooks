@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "React 19 New Hooks Sandbox",
+  title: "React19 Newhooks Fingerprintjs",
   description: "Created by Trae Zeeofor",
 };
 

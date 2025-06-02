@@ -10,7 +10,7 @@ export default function Header() {
             href="/"
             className="flex items-center self-center text-2xl font-semibold whitespace-nowrap  hover:text-green-700"
           >
-            React 19 New Hooks Sandbox
+            React19 Newhooks Fingerprintjs
           </Link>
         </menu>
         <RouteSelector />

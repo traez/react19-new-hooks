@@ -1,6 +1,6 @@
-# Payload Headless CMS - Freelancing Sandbox
+# React19-Newhooks-Fingerprintjs
 
-A Payload Headless CMS - Freelancing Sandbox app
+Sandbox app for React 19 new hooks and Fingerprintjs simulation
 
 ## Table of contents
 
