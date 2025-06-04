@@ -27,25 +27,21 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-screen h-auto bg-[#E6F7FF]">
-        <section className="flex-col items-center justify-between py-4 px-8 bg-white w-full max-w-[1440px] mx-auto">
-          <h1>Trae Zeeofor</h1>
-          {/* First code block */}
-          <CodeHighlighter language="typescript" code={sampleCode} />
-          <CommandHelpBlock />
-          {/* Second code block */}
-          <CodeHighlighter language="typescript" code={anotherCode} />
-        </section>
-      </div>
+      <section className="flex-col items-center justify-between py-4 px-8 bg-white w-full min-h-[calc(100vh-84.96px)] mx-auto">
+        <h1>Trae Zeeofor</h1>
+        {/* First code block */}
+        <CodeHighlighter language="typescript" code={sampleCode} />
+        <CommandHelpBlock />
+        {/* Second code block */}
+        <CodeHighlighter language="typescript" code={anotherCode} />
+      </section>
     </>
   );
 }
 
-
-
 const CommandHelpBlock: React.FC = () => {
   return (
-    <section className="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-950 rounded-xl shadow-md space-y-6">
+    <section className="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-950 rounded-xl shadow-md space-y-6 h-auto">
       <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
         Terminal Commands & Shortcuts
       </h2>
@@ -105,6 +101,8 @@ const CommandHelpBlock: React.FC = () => {
         can be shown inline using the{" "}
         <code className="bg-gray-100 px-1 rounded">&lt;kbd&gt;</code> tag.
       </p>
+
+      <div className=" container">Trae</div>
     </section>
   );
 };
