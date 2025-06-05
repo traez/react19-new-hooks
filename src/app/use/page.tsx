@@ -4,7 +4,7 @@ import { Suspense } from "react";
 export default function UsePage() {
   return (
     <div className="w-full h-auto bg-[#E6F7FF]">
-      <section className="py-8 px-8 h-full bg-white w-full max-w-[1440px] mx-auto">
+      <section className="py-8 px-8  bg-[#E6F7FF] w-full max-w-[1440px] h-full  mx-auto ">
         <article className="bg-white shadow-xl rounded-2xl p-8 mb-8 max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-gray-800 pb-3">
             React 19 use() Hook
