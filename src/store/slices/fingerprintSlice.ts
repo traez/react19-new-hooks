@@ -1,6 +1,27 @@
 // src/store/slices/fingerprintSlice.ts
 import type { StateCreator } from "zustand";
 
+// src/store/slices/fingerprintSlice.ts
+export interface ServerFingerprint {
+    network: {
+      ip: string;
+      country?: string;
+      region?: string;
+      city?: string;
+    };
+    request: {
+      method?: string;
+      userAgent?: string;
+      acceptLanguage?: string;
+      referrer?: string;
+      host?: string;
+    };
+    deployment: {
+      environment?: string;
+    };
+    timestamp: string;
+  }
+
 export interface FingerprintData {
   deviceType: string;
   osModel: string;
@@ -14,12 +35,16 @@ export interface FingerprintData {
   platform: string;
   trustScore: number;
   timestamp: string;
+  serverData?: ServerFingerprint;
+  consentGiven: boolean;
 }
 
 export interface FingerprintSliceType {
   fingerprint: FingerprintData | null;
   isLoaded: boolean;
-  collectFingerprint: () => void;
+  error: string | null;
+  collectFingerprint: (consent: boolean) => Promise<void>;
+  resetFingerprint: () => void;
 }
 
 export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
@@ -27,29 +52,55 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
 ) => ({
   fingerprint: null,
   isLoaded: false,
-  collectFingerprint: () => {
-    if (typeof window === "undefined") return; // Skip during SSR
+  error: null,
+  collectFingerprint: async (consent) => {
+    if (typeof window === "undefined") return;
 
-    const fingerprint: FingerprintData = {
-      deviceType: detectDeviceType(),
-      osModel: detectOS(),
-      browserInfo: detectBrowser(),
-      windowInnerResolution: `${window.innerWidth}x${window.innerHeight}`,
-      screenOrientation: window.screen.orientation?.type || "unknown",
-      language: navigator.language,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      hardwareConcurrency: navigator.hardwareConcurrency || 0,
-      deviceMemory: (navigator as any).deviceMemory,
-      platform: navigator.platform,
-      trustScore: calculateTrustScore(),
-      timestamp: new Date().toLocaleString(),
-    };
+    try {
+      set({ isLoaded: false, error: null });
 
-    set({ fingerprint, isLoaded: true });
+      // Always collect basic client data (non-identifiable)
+      const clientFingerprint: Partial<FingerprintData> = {
+        deviceType: detectDeviceType(),
+        osModel: detectOS(),
+        browserInfo: detectBrowser(),
+        windowInnerResolution: `${window.innerWidth}x${window.innerHeight}`,
+        screenOrientation: window.screen.orientation?.type || "unknown",
+        language: navigator.language,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        hardwareConcurrency: navigator.hardwareConcurrency || 0,
+        deviceMemory: (navigator as any).deviceMemory,
+        platform: navigator.platform,
+        trustScore: calculateTrustScore(),
+        timestamp: new Date().toISOString(),
+        consentGiven: consent,
+      };
+
+      // Only collect server data if consent is given
+      let serverData: ServerFingerprint | undefined;
+      if (consent) {
+        const response = await fetch("/api/fingerprint");
+        if (!response.ok) throw new Error("Failed to fetch server fingerprint");
+        serverData = await response.json();
+      }
+
+      set({
+        fingerprint: {
+          ...(clientFingerprint as FingerprintData),
+          serverData,
+        },
+        isLoaded: true,
+      });
+    } catch (err) {
+      console.error("Fingerprint collection error:", err);
+      set({ error: "Failed to collect fingerprint data", isLoaded: true });
+    }
   },
+  resetFingerprint: () =>
+    set({ fingerprint: null, isLoaded: false, error: null }),
 });
 
-// Detection helpers
+// Detection helpers (same as before)
 const detectDeviceType = (): string => {
   const ua = navigator.userAgent;
   if (/tablet|ipad|playbook|silk/i.test(ua)) return "Tablet";
@@ -79,5 +130,6 @@ const detectBrowser = (): string => {
 };
 
 const calculateTrustScore = (): number => {
-  return 117;
+  // Implement your trust score logic
+  return Math.floor(Math.random() * 30) + 70; // Random score between 70-100 for demo
 };
