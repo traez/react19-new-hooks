@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import { useAppStore } from "@/store/StoreProvider";
 
 export default function FingerprintDisplay() {
-  const { fingerprint, isLoaded, error, collectFingerprint, resetFingerprint } =
-    useAppStore((state) => state);
+  const {
+    fingerprint,
+    isLoaded,
+    error,
+    collectFingerprint,
+  } = useAppStore((state) => state);
   const [consentGiven, setConsentGiven] = useState(false);
 
   useEffect(() => {
@@ -15,8 +19,8 @@ export default function FingerprintDisplay() {
   const handleConsentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newConsent = e.target.checked;
     setConsentGiven(newConsent);
-    if (isLoaded) {
-      resetFingerprint();
+    // Instead of resetting, just update the consent in the existing fingerprint
+    if (fingerprint) {
       collectFingerprint(newConsent);
     }
   };
@@ -33,6 +37,30 @@ export default function FingerprintDisplay() {
         consentGiven={consentGiven}
         onChange={handleConsentChange}
       />
+
+      {/* Visitor Information Section */}
+      <div className="mt-6 p-4 bg-green-50 rounded-lg">
+        <h3 className="text-xl font-semibold mb-4 text-green-800">
+          Visitor Information
+        </h3>
+        <div className="grid grid-cols-2 gap-4">
+          <DataRow
+            label="Visitor ID"
+            value={fingerprint.visitorId || "Generating..."}
+          />
+          <DataRow
+            label="Visit Count"
+            value={fingerprint.visitCount.toString()}
+          />
+          <DataRow
+            label="Last Seen"
+            value={new Date(fingerprint.timestamp).toLocaleString()}
+          />
+          <DataRow label="Trust Score" value={`${fingerprint.trustScore}%`} />
+        </div>
+      </div>
+
+      {/* Device Information Section */}
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-4 text-gray-700">
           Device Information
@@ -64,14 +92,10 @@ export default function FingerprintDisplay() {
             }
           />
           <DataRow label="Platform" value={fingerprint.platform} />
-          <DataRow label="Trust Score" value={`${fingerprint.trustScore}%`} />
-          <DataRow
-            label="Timestamp"
-            value={new Date(fingerprint.timestamp).toLocaleString()}
-          />
         </div>
       </div>
-      {/* In the FingerprintDisplay component's JSX */}
+
+      {/* Network Information Section */}
       {consentGiven && fingerprint.serverData && (
         <div className="mt-8 pt-6 border-t border-gray-200">
           <h3 className="text-xl font-semibold mb-4 text-gray-700">
@@ -164,10 +188,7 @@ const ConsentBanner = ({
         </label>
         <p className="text-gray-500">
           Check this box to allow collection of network information (anonymized
-          IP, location). You can change this anytime.{" "}
-          <a href="/privacy" className="text-blue-600 hover:text-blue-500">
-            Learn more
-          </a>
+          IP, location).
         </p>
       </div>
     </div>

@@ -1,7 +1,5 @@
-// src/store/slices/fingerprintSlice.ts
 import type { StateCreator } from "zustand";
 
-// src/store/slices/fingerprintSlice.ts
 export interface ServerFingerprint {
   network: {
     ip: string;
@@ -31,6 +29,8 @@ export interface FingerprintData {
   timestamp: string;
   serverData?: ServerFingerprint;
   consentGiven: boolean;
+  visitorId?: string;
+  visitCount: number;
 }
 
 export interface FingerprintSliceType {
@@ -38,20 +38,29 @@ export interface FingerprintSliceType {
   isLoaded: boolean;
   error: string | null;
   collectFingerprint: (consent: boolean) => Promise<void>;
-  resetFingerprint: () => void;
 }
 
 export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
-  set
+  set,
+  get
 ) => ({
   fingerprint: null,
   isLoaded: false,
   error: null,
+
   collectFingerprint: async (consent) => {
     if (typeof window === "undefined") return;
 
     try {
       set({ isLoaded: false, error: null });
+
+      const currentState = get();
+      const existingFingerprint = currentState.fingerprint;
+
+      // Calculate the new visit count
+      const newVisitCount = existingFingerprint
+        ? existingFingerprint.visitCount + 1
+        : 1;
 
       const clientFingerprint: Partial<FingerprintData> = {
         deviceType: detectDeviceType(),
@@ -67,18 +76,47 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
         trustScore: calculateTrustScore(),
         timestamp: new Date().toISOString(),
         consentGiven: consent,
+        visitCount: newVisitCount, // Use the incremented count
+        visitorId: existingFingerprint?.visitorId, // Preserve existing ID
       };
 
+      // Only generate new visitor ID if we don't have one
+      if (!clientFingerprint.visitorId) {
+        try {
+          const visitorResponse = await fetch("/api/generate-visitor-id", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ fingerprint: clientFingerprint }),
+          });
+
+          if (visitorResponse.ok) {
+            const visitorData = await visitorResponse.json();
+            clientFingerprint.visitorId = visitorData.visitorId;
+          }
+        } catch (visitorError) {
+          console.warn("Failed to generate visitor ID:", visitorError);
+        }
+      }
+
+      // Fetch server data if consent is given
       let serverData: ServerFingerprint | undefined;
       if (consent) {
-        const response = await fetch("/api/fingerprint");
-        if (!response.ok) throw new Error("Failed to fetch server fingerprint");
-        serverData = await response.json();
+        try {
+          const response = await fetch("/api/fingerprint");
+          if (response.ok) {
+            serverData = await response.json();
+          }
+        } catch (serverError) {
+          console.warn("Failed to fetch server fingerprint:", serverError);
+        }
       }
 
       set({
         fingerprint: {
           ...(clientFingerprint as FingerprintData),
+          visitorId: clientFingerprint.visitorId,
           serverData,
         },
         isLoaded: true,
@@ -88,9 +126,6 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
       set({ error: "Failed to collect fingerprint data", isLoaded: true });
     }
   },
-  resetFingerprint: () =>
-    set({ fingerprint: null, isLoaded: false, error: null }),
-  // ... rest of the code remains the same
 });
 
 // Detection helpers (same as before)
