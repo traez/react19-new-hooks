@@ -49,6 +49,7 @@ export interface FingerprintData {
 export interface FingerprintSliceType {
   fingerprint: FingerprintData | null;
   isLoaded: boolean;
+  isLoading: boolean; // Add explicit loading state
   error: string | null;
   collectFingerprint: (consent: boolean) => Promise<void>;
 }
@@ -59,13 +60,14 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
 ) => ({
   fingerprint: null,
   isLoaded: false,
+  isLoading: false, // Initialize loading state
   error: null,
 
   collectFingerprint: async (consent) => {
     if (typeof window === "undefined") return;
 
     try {
-      set({ isLoaded: false, error: null });
+      set({ isLoading: true, isLoaded: false, error: null });
 
       const currentState = get();
       const existingFingerprint = currentState.fingerprint;
@@ -148,10 +150,15 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
           visitorNetwork, // new addition
         },
         isLoaded: true,
+        isLoading: false, // Set loading to false when complete
       });
     } catch (err) {
       console.error("Fingerprint collection error:", err);
-      set({ error: "Failed to collect fingerprint data", isLoaded: true });
+      set({
+        error: "Failed to collect fingerprint data",
+        isLoaded: true,
+        isLoading: false, // Set loading to false on error
+      });
     }
   },
 });
