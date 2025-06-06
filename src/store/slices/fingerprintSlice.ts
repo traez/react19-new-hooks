@@ -14,6 +14,18 @@ export interface ServerFingerprint {
   timestamp: string;
 }
 
+// Add new VisitorNetwork interface
+export interface VisitorNetwork {
+  ip: string;
+  city?: string;
+  region?: string;
+  country?: string;
+  location?: string;
+  isp?: string;
+  timezone?: string;
+}
+
+// Update FingerprintData interface
 export interface FingerprintData {
   deviceType: string;
   osModel: string;
@@ -28,6 +40,7 @@ export interface FingerprintData {
   trustScore: number;
   timestamp: string;
   serverData?: ServerFingerprint;
+  visitorNetwork?: VisitorNetwork; // Add this
   consentGiven: boolean;
   visitorId?: string;
   visitCount: number;
@@ -105,12 +118,25 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
       let serverData: ServerFingerprint | undefined;
       if (consent) {
         try {
-          const response = await fetch("/api/fingerprint");
+          const response = await fetch("/api/host-network");
           if (response.ok) {
             serverData = await response.json();
           }
         } catch (serverError) {
-          console.warn("Failed to fetch server fingerprint:", serverError);
+          console.warn("Failed to fetch Host server fingerprint:", serverError);
+        }
+      }
+
+      // ADD NEW VISITOR NETWORK FETCH (without altering existing logic)
+      let visitorNetwork: VisitorNetwork | undefined;
+      if (consent) {
+        try {
+          const visitorNetworkResponse = await fetch("/api/visitor-network");
+          if (visitorNetworkResponse.ok) {
+            visitorNetwork = await visitorNetworkResponse.json();
+          }
+        } catch (visitorNetworkError) {
+          console.warn("Failed to fetch visitor network:", visitorNetworkError);
         }
       }
 
@@ -118,7 +144,8 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
         fingerprint: {
           ...(clientFingerprint as FingerprintData),
           visitorId: clientFingerprint.visitorId,
-          serverData,
+          serverData, // existing
+          visitorNetwork, // new addition
         },
         isLoaded: true,
       });

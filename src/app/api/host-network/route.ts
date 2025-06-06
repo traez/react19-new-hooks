@@ -37,9 +37,9 @@ export async function GET() {
 
     return NextResponse.json(fingerprint);
   } catch (error) {
-    console.error("Error fetching IP info:", error);
+    console.error("Error fetching Host IP info:", error);
     return NextResponse.json(
-      { error: "Failed to fetch IP information" },
+      { error: "Failed to fetch Host IP information" },
       { status: 500 }
     );
   }

@@ -4,12 +4,9 @@ import { useEffect, useState } from "react";
 import { useAppStore } from "@/store/StoreProvider";
 
 export default function FingerprintDisplay() {
-  const {
-    fingerprint,
-    isLoaded,
-    error,
-    collectFingerprint,
-  } = useAppStore((state) => state);
+  const { fingerprint, isLoaded, error, collectFingerprint } = useAppStore(
+    (state) => state
+  );
   const [consentGiven, setConsentGiven] = useState(false);
 
   useEffect(() => {
@@ -37,7 +34,6 @@ export default function FingerprintDisplay() {
         consentGiven={consentGiven}
         onChange={handleConsentChange}
       />
-
       {/* Visitor Information Section */}
       <div className="mt-6 p-4 bg-green-50 rounded-lg">
         <h3 className="text-xl font-semibold mb-4 text-green-800">
@@ -59,7 +55,6 @@ export default function FingerprintDisplay() {
           <DataRow label="Trust Score" value={`${fingerprint.trustScore}%`} />
         </div>
       </div>
-
       {/* Device Information Section */}
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-4 text-gray-700">
@@ -94,12 +89,11 @@ export default function FingerprintDisplay() {
           <DataRow label="Platform" value={fingerprint.platform} />
         </div>
       </div>
-
       {/* Network Information Section */}
       {consentGiven && fingerprint.serverData && (
         <div className="mt-8 pt-6 border-t border-gray-200">
           <h3 className="text-xl font-semibold mb-4 text-gray-700">
-            Network Information
+            Host Network Information
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <DataRow
@@ -125,6 +119,42 @@ export default function FingerprintDisplay() {
             <DataRow
               label="Environment"
               value={fingerprint.serverData.deployment.environment || "Unknown"}
+            />
+          </div>
+        </div>
+      )}
+      {/* Add this new section anywhere appropriate in your FingerprintDisplay
+      component */}
+      {consentGiven && fingerprint.visitorNetwork && (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+          <h3 className="text-xl font-semibold mb-4 text-blue-800">
+            Visitor Network Information
+          </h3>
+          <div className="grid grid-cols-2 gap-4">
+            <DataRow label="IP Address" value={fingerprint.visitorNetwork.ip} />
+            <DataRow
+              label="City"
+              value={fingerprint.visitorNetwork.city || "Unknown"}
+            />
+            <DataRow
+              label="Region"
+              value={fingerprint.visitorNetwork.region || "Unknown"}
+            />
+            <DataRow
+              label="Country"
+              value={fingerprint.visitorNetwork.country || "Unknown"}
+            />
+            <DataRow
+              label="Location"
+              value={fingerprint.visitorNetwork.location || "Unknown"}
+            />
+            <DataRow
+              label="ISP"
+              value={fingerprint.visitorNetwork.isp || "Unknown"}
+            />
+            <DataRow
+              label="Timezone"
+              value={fingerprint.visitorNetwork.timezone || "Unknown"}
             />
           </div>
         </div>
