@@ -71,7 +71,8 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
         language: navigator.language,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         hardwareConcurrency: navigator.hardwareConcurrency || 0,
-        deviceMemory: (navigator as any).deviceMemory,
+        deviceMemory: (navigator as Navigator & { deviceMemory?: number })
+          .deviceMemory,
         platform: navigator.platform,
         trustScore: calculateTrustScore(),
         timestamp: new Date().toISOString(),
