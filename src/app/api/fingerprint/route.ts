@@ -1,55 +1,46 @@
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; // Ensure this is a dynamic route
 
-export async function GET(request: Request) {
-  const headers = request.headers;
-  const ip =
-    headers.get("x-forwarded-for") || headers.get("x-real-ip") || "Unknown";
-
-  // Initialize location data
-  let country = "Unknown";
-  let region = "Unknown";
-  let city = "Unknown";
-
-  // Simple IP-based geolocation (mock example)
-  if (ip !== "Unknown") {
-    // This is a mock implementation - replace with real geolocation in production
-    const ipParts = ip.split(".");
-    const firstOctet = parseInt(ipParts[0]);
-
-    if (firstOctet < 50) {
-      country = "US";
-      region = "North America";
-      city = "Cloud Provider"; // Often indicates AWS/GCP data centers
-    } else if (firstOctet < 100) {
-      country = "UK";
-      region = "Europe";
-      city = "London";
-    } else {
-      country = "Other";
-    }
+export async function GET() {
+  const token = process.env.NEXT_PUBLIC_IPINFO_TOKEN;
+  if (!token) {
+    return NextResponse.json(
+      { error: "IP info token not configured" },
+      { status: 500 }
+    );
   }
 
-  const serverFingerprint = {
-    network: {
-      ip, // Now showing full unmasked IP
-      country,
-      region,
-      city,
-    },
-    request: {
-      method: request.method,
-      userAgent: headers.get("user-agent"),
-      acceptLanguage: headers.get("accept-language"),
-      referrer: headers.get("referer"),
-      host: headers.get("host"),
-    },
-    deployment: {
-      environment: process.env.NODE_ENV,
-    },
-    timestamp: new Date().toISOString(),
-  };
+  try {
+    const response = await fetch(
+      `https://api.ipinfo.io/lite/me?token=${token}`
+    );
+    if (!response.ok) {
+      throw new Error(`IP info API responded with ${response.status}`);
+    }
+    const data = await response.json();
 
-  return NextResponse.json(serverFingerprint);
+    // Transform the response to include only the fields you want
+    const fingerprint = {
+      network: {
+        ip: data.ip,
+        as_name: data.as_name,
+        as_domain: data.as_domain,
+        country: data.country,
+        continent: data.continent,
+      },
+      deployment: {
+        environment: process.env.NODE_ENV,
+      },
+      timestamp: new Date().toISOString(),
+    };
+
+    return NextResponse.json(fingerprint);
+  } catch (error) {
+    console.error("Error fetching IP info:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch IP information" },
+      { status: 500 }
+    );
+  }
 }

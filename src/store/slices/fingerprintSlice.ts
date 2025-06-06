@@ -3,24 +3,18 @@ import type { StateCreator } from "zustand";
 
 // src/store/slices/fingerprintSlice.ts
 export interface ServerFingerprint {
-    network: {
-      ip: string;
-      country?: string;
-      region?: string;
-      city?: string;
-    };
-    request: {
-      method?: string;
-      userAgent?: string;
-      acceptLanguage?: string;
-      referrer?: string;
-      host?: string;
-    };
-    deployment: {
-      environment?: string;
-    };
-    timestamp: string;
-  }
+  network: {
+    ip: string;
+    as_name?: string;
+    as_domain?: string;
+    country?: string;
+    continent?: string;
+  };
+  deployment: {
+    environment?: string;
+  };
+  timestamp: string;
+}
 
 export interface FingerprintData {
   deviceType: string;
@@ -59,7 +53,6 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
     try {
       set({ isLoaded: false, error: null });
 
-      // Always collect basic client data (non-identifiable)
       const clientFingerprint: Partial<FingerprintData> = {
         deviceType: detectDeviceType(),
         osModel: detectOS(),
@@ -76,7 +69,6 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
         consentGiven: consent,
       };
 
-      // Only collect server data if consent is given
       let serverData: ServerFingerprint | undefined;
       if (consent) {
         const response = await fetch("/api/fingerprint");
@@ -98,6 +90,7 @@ export const createFingerprintSlice: StateCreator<FingerprintSliceType> = (
   },
   resetFingerprint: () =>
     set({ fingerprint: null, isLoaded: false, error: null }),
+  // ... rest of the code remains the same
 });
 
 // Detection helpers (same as before)

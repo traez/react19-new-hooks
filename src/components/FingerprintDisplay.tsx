@@ -71,7 +71,7 @@ export default function FingerprintDisplay() {
           />
         </div>
       </div>
-      // In the FingerprintDisplay component's JSX
+      {/* In the FingerprintDisplay component's JSX */}
       {consentGiven && fingerprint.serverData && (
         <div className="mt-8 pt-6 border-t border-gray-200">
           <h3 className="text-xl font-semibold mb-4 text-gray-700">
@@ -83,25 +83,20 @@ export default function FingerprintDisplay() {
               value={fingerprint.serverData.network.ip}
             />
             <DataRow
+              label="ISP"
+              value={fingerprint.serverData.network.as_name || "Unknown"}
+            />
+            <DataRow
+              label="ISP Domain"
+              value={fingerprint.serverData.network.as_domain || "Unknown"}
+            />
+            <DataRow
               label="Country"
-              value={fingerprint.serverData.network.country}
+              value={fingerprint.serverData.network.country || "Unknown"}
             />
             <DataRow
-              label="Region"
-              value={fingerprint.serverData.network.region}
-            />
-            <DataRow label="City" value={fingerprint.serverData.network.city} />
-            <DataRow
-              label="User Agent"
-              value={fingerprint.serverData.request.userAgent || "Unknown"}
-            />
-            <DataRow
-              label="Preferred Language"
-              value={fingerprint.serverData.request.acceptLanguage || "Unknown"}
-            />
-            <DataRow
-              label="Referrer"
-              value={fingerprint.serverData.request.referrer || "Direct"}
+              label="Continent"
+              value={fingerprint.serverData.network.continent || "Unknown"}
             />
             <DataRow
               label="Environment"
