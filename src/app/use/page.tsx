@@ -13,7 +13,7 @@ export default function UsePage() {
       <section className="py-8 px-8  bg-[#E6F7FF] w-full max-w-[1440px] h-full  mx-auto ">
         <article className="bg-white shadow-xl rounded-2xl p-8 mb-8 max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-gray-800 pb-3">
-            React 19 use() Hook
+            React 19 use API
           </h1>
 
           {/* Demo Section */}
@@ -57,7 +57,9 @@ export default function UsePage() {
                 <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
                   &lt;Suspense&gt;
                 </code>{" "}
-                to handle async data fetching declaratively.
+                to handle async data fetching declaratively. The primary
+                objective of this new use API is to be able to control loading
+                and error states while retrieving data.
               </p>
               <div>
                 <p className="font-semibold mb-2">

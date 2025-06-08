@@ -1,3 +1,4 @@
+"use client";
 import { use } from "react";
 import type { JSX } from "react";
 
