@@ -1,7 +1,29 @@
 import { use } from "react";
 import type { JSX } from "react";
 
-async function fetchProduct() {
+interface Review {
+  rating: number;
+  comment: string;
+  date: string;
+  reviewerName: string;
+  reviewerEmail: string;
+}
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  thumbnail: string;
+  reviews: Review[];
+}
+
+async function fetchProduct(): Promise<Product> {
   const res = await fetch("https://dummyjson.com/products/1/?delay=5000");
   if (!res.ok) throw new Error("Failed to fetch product");
   return res.json();
@@ -52,7 +74,7 @@ export default function UseAPI(): JSX.Element {
         <div className="mt-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-3">Reviews</h3>
           <ul className="space-y-4">
-            {product.reviews.map((review: any, idx: number) => (
+            {product.reviews.map((review, idx) => (
               <li
                 key={idx}
                 className="p-4 border rounded-lg bg-gray-50 text-sm"
