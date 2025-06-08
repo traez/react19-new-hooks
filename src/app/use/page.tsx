@@ -93,10 +93,10 @@ export default function Greeting() {
                 retrieval.
               </p>
               <p>
-                However, in Next.js, this isn't as effective. Since pages are
-                server-rendered, the page won't render until the data fetching
-                is complete, which leaves no opportunity for the fallback UI to
-                display.
+                However, in Next.js, this isn&apos;t as effective. Since pages
+                are server-rendered, the page won&apos;t render until the data
+                fetching is complete, which leaves no opportunity for the
+                fallback UI to display.
               </p>
             </div>
           </aside>
@@ -158,8 +158,9 @@ export default function Greeting() {
                     </h4>
                     <p className="text-sm">
                       <code>fetchGreeting()</code> returns a Promise that
-                      resolves after 2 seconds with "Hello from the future!".
-                      This simulates a real API call or database query.
+                      resolves after 2 seconds with &quot;Hello from the
+                      future!&quot;. This simulates a real API call or database
+                      query.
                     </p>
                   </div>
 
@@ -169,9 +170,9 @@ export default function Greeting() {
                     </h4>
                     <p className="text-sm">
                       <code>const message = use(fetchGreeting());</code> - This
-                      single line pauses the component's rendering until the
-                      promise resolves. No useState, no useEffect, no loading
-                      state management needed!
+                      single line pauses the component&apos;s rendering until
+                      the promise resolves. No useState, no useEffect, no
+                      loading state management needed!
                     </p>
                   </div>
 
@@ -180,9 +181,9 @@ export default function Greeting() {
                       4. The User Experience
                     </h4>
                     <p className="text-sm">
-                      While waiting, users see "Loading message..." (the
-                      Suspense fallback). Once resolved, the component renders
-                      with the actual message.
+                      While waiting, users see &quot;Loading message...&quot;
+                      (the Suspense fallback). Once resolved, the component
+                      renders with the actual message.
                     </p>
                   </div>
                 </div>
