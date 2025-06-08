@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 
 const routes = [
   { path: "/", label: "Home" },
-  { path: "/use", label: "use API" },
-  { path: "/use-action-state", label: "UseActionState" },
-  { path: "/use-form-status", label: "UseFormStatus" },
-  { path: "/use-optimistic", label: "UseOptimistic" },
-  { path: "/use-ref", label: "UseRef" },
+  { path: "/use", label: "useAPI" },
+  { path: "/use-ref", label: "useRef" },
+  { path: "/use-transition", label: "useTransition" },
+  { path: "/use-action-state", label: "useActionState" },
+  { path: "/use-form-status", label: "useFormStatus" },
+  { path: "/use-optimistic", label: "useOptimistic" },
 ];
 
 export default function RouteSelector() {

@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "useOptimistic - React19 Newhooks Fingerprintjs",
+  description: "Created by Trae Zeeofor",
+};
+
 export default function UseOptimisticPage() {
   return (
     <>

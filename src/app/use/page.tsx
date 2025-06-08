@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import UseAPI from "@/components/UseAPI";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "useAPI - React19 Newhooks Fingerprintjs",
+  description: "Created by Trae Zeeofor",
+};
 
 export default function UsePage() {
   return (

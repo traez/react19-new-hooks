@@ -7,9 +7,9 @@ export default function Header() {
       <menu className="flex justify-start">
         <Link
           href="/"
-          className="flex items-center self-center text-2xl font-semibold whitespace-nowrap  hover:text-green-700"
+          className="flex items-center self-center text-[20px] sm:text-2xl font-semibold whitespace-nowrap  hover:text-green-700"
         >
-          React19 Newhooks Fingerprintjs
+          React19 NewHooks Fingerprinting
         </Link>
       </menu>
       <RouteSelector />

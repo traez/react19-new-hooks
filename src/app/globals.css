@@ -19,11 +19,24 @@ While there's no universally fixed "acceptable" max height, sticking to 400–70
   --foreground: #171717;
 }
 
+@layer base {
+  * {
+    utline: 1px solid black;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-trebuchetMs: "Trebuchet MS";
+  --breakpoint-xs: 480px;
+  --breakpoint-1xl: 1440px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -36,5 +49,4 @@ While there's no universally fixed "acceptable" max height, sticking to 400–70
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

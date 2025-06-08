@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "useFormStatus - React19 Newhooks Fingerprintjs",
+  title: "useTransition - React19 Newhooks Fingerprintjs",
   description: "Created by Trae Zeeofor",
 };
 
-export default function UseFormStatusPage() {
+export default function UseTransitionPage() {
   return (
     <>
       <section className="py-4 px-8">
