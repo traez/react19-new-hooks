@@ -33,20 +33,22 @@ export default function UseAPI(): JSX.Element {
   const product = use(fetchProduct());
 
   return (
-    <section className="space-y-6">
-      <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-        <div className="flex gap-6">
+    <section className="space-y-6 px-4">
+      <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200">
+        <div className="flex flex-col sm:flex-row gap-4">
           <img
             src={product.thumbnail}
             alt={product.title}
-            className="w-40 h-40 object-cover rounded-lg border"
+            className="w-full sm:w-40 h-40 object-cover rounded-lg border mx-auto sm:mx-0"
           />
           <div className="flex-1 space-y-2">
-            <h2 className="text-2xl font-bold text-indigo-800">
+            <h2 className="text-xl sm:text-2xl font-bold text-indigo-800">
               {product.title}
             </h2>
-            <p className="text-gray-700">{product.description}</p>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
+            <p className="text-gray-700 text-sm sm:text-base">
+              {product.description}
+            </p>
+            <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-600">
               <span>
                 Category: <strong>{product.category}</strong>
               </span>
@@ -57,11 +59,11 @@ export default function UseAPI(): JSX.Element {
                 Stock: <strong>{product.stock}</strong>
               </span>
             </div>
-            <div className="flex items-center gap-6 mt-2">
-              <span className="text-xl font-bold text-green-700">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-6 mt-2 text-sm sm:text-base">
+              <span className="font-bold text-green-700">
                 ${product.price.toFixed(2)}
               </span>
-              <span className="text-sm text-red-600">
+              <span className="text-red-600">
                 -{product.discountPercentage.toFixed(1)}% off
               </span>
               <span className="text-yellow-600 font-semibold">
@@ -71,13 +73,15 @@ export default function UseAPI(): JSX.Element {
           </div>
         </div>
 
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-3">Reviews</h3>
-          <ul className="space-y-4">
+        <div className="mt-4">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
+            Reviews
+          </h3>
+          <ul className="space-y-3">
             {product.reviews.map((review, idx) => (
               <li
                 key={idx}
-                className="p-4 border rounded-lg bg-gray-50 text-sm"
+                className="p-3 border rounded-lg bg-gray-50 text-xs sm:text-sm"
               >
                 <div className="font-medium text-gray-900">
                   {review.reviewerName} &middot;{" "}

@@ -30,7 +30,7 @@ export default function CodeHighlighter({
 
   return (
     <div className="relative mx-auto">
-      <pre className=" whitespace-normal">
+      <pre className="whitespace-pre">
         <code ref={codeRef} className={language}>
           {code}
         </code>
@@ -47,8 +47,13 @@ export default function CodeHighlighter({
   );
 }
 
+
 /* 
 How to see all available styles:
 You can check your node_modules/highlight.js/styles/ folder in your project, or just browse the Highlight.js GitHub repo here:
 https://github.com/highlightjs/highlight.js/tree/main/src/styles
+
+  whitespace-normal 
+  and
+  whitespace-pre interchange for extra spacing control etc
 */

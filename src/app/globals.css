@@ -50,3 +50,10 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+code {
+  font-family: monospace;
+  background: #e0e0e0;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}

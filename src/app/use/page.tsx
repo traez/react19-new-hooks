@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import UseAPI from "@/components/UseAPI";
 import { Suspense } from "react";
+import CodeHighlighter from "@/lib/CodeHighlighter";
 
 export const metadata: Metadata = {
   title: "useAPI - React19 Newhooks Fingerprintjs",
@@ -8,6 +9,38 @@ export const metadata: Metadata = {
 };
 
 export default function UsePage() {
+  const pageCode = `import { Suspense } from "react";
+import Greeting from "./Greeting";
+
+export default function Page() {
+  return (
+    <main>
+      <h1>React 19: use() Demo</h1>
+      <Suspense fallback={<p>Loading message...</p>}>
+        <Greeting />
+      </Suspense>
+    </main>
+  );
+}`;
+
+  const greetingCode = `'use client';
+
+import { use } from "react";
+
+function fetchGreeting(): Promise<string> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Hello from the future!");
+    }, 2000);
+  });
+}
+
+export default function Greeting() {
+  const message = use(fetchGreeting());
+
+  return <p>{message}</p>;
+}`;
+
   return (
     <div className="w-full h-auto bg-[#E6F7FF]">
       <section className="py-8 px-8  bg-[#E6F7FF] w-full max-w-[1440px] h-full  mx-auto ">
@@ -50,145 +83,108 @@ export default function UsePage() {
             </h2>
             <div className="leading-relaxed space-y-4">
               <p>
-                React 19 introduces use(), a new API that lets you pause
-                component rendering until a Promise resolves — no useEffect, no
-                useState, and no manual loading logic needed. It integrates
-                seamlessly with{" "}
-                <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
-                  &lt;Suspense&gt;
-                </code>{" "}
-                to handle async data fetching declaratively. The primary
-                objective of this new use API is to be able to control loading
-                and error states while retrieving data.
+                React 19 introduces <code>use</code>, a new API that lets you
+                pause component rendering until a Promise resolves—no
+                <code>useEffect</code>, no <code>useState</code>, and no manual
+                loading logic needed. It integrates seamlessly with{" "}
+                <code>{`<Suspense>`}</code> to handle async data fetching
+                declaratively. The main goal of the new <code>use</code> API is
+                to simplify handling loading and error states during data
+                retrieval.
               </p>
-              <div>
-                <p className="font-semibold mb-2">
-                  ⚙️ How It Works (from Your Example):
-                </p>
-                <div className="bg-gray-100 rounded-lg p-3 font-mono text-sm border">
-                  <div>const message = use(fetchMessage());</div>
-                  <div>const user = use(fetchUser());</div>
-                </div>
-              </div>
-              <ul className="list-disc list-inside space-y-2 pl-4">
-                <li>Rendering pauses until each Promise resolves.</li>
-                <li>
-                  The{" "}
-                  <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
-                    &lt;Suspense&gt;
-                  </code>{" "}
-                  wrapper shows a fallback (Loading async data...) while
-                  waiting.
-                </li>
-                <li>
-                  Once resolved, the data is available immediately — no extra
-                  state or re-renders.
-                </li>
-              </ul>
+              <p>
+                However, in Next.js, this isn't as effective. Since pages are
+                server-rendered, the page won't render until the data fetching
+                is complete, which leaves no opportunity for the fallback UI to
+                display.
+              </p>
             </div>
           </aside>
 
-          {/* Enhanced Code Example Section */}
-          <section className="mt-8 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded mr-3 flex items-center justify-center">
-                  <svg
-                    className="w-3 h-3 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                Code Implementation
-              </h2>
-              <div className="flex items-center space-x-2">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  React 19
-                </span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                  TypeScript
-                </span>
+          {/* Code Examples Section */}
+          <section className="mt-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+              <div className="w-6 h-6 bg-green-500 rounded mr-3"></div>
+              Code Examples
+            </h2>
+
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium text-gray-700 mb-3">
+                  /app/page.tsx
+                </h3>
+                <CodeHighlighter language="typescript" code={pageCode} />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-700 mb-3">
+                  /app/Greeting.tsx
+                </h3>
+                <CodeHighlighter language="typescript" code={greetingCode} />
               </div>
             </div>
+          </section>
 
-            <div className="space-y-4">
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                <div className="bg-gray-800 px-4 py-2 flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    </div>
-                    <span className="text-gray-300 text-sm font-mono">
-                      UseAPI.tsx
-                    </span>
-                  </div>
-                  <button className="text-gray-400 hover:text-white transition-colors duration-200 text-sm">
-                    Copy
-                  </button>
-                </div>
-                <div className="p-4 bg-gray-50 font-mono text-sm text-gray-700 overflow-x-auto">
-                  <div className="space-y-1">
-                    <div>
-                      <span className="text-blue-600">import</span>{" "}
-                      <span className="text-purple-600">{`use`}</span>{" "}
-                      <span className="text-blue-600">from</span>{" "}
-                      <span className="text-green-600">&apos;react&apos;</span>;
-                    </div>
-                    <div className="mt-2">
-                      <span className="text-blue-600">const</span>{" "}
-                      <span className="text-gray-800">message</span> ={" "}
-                      <span className="text-purple-600">use</span>(
-                      <span className="text-gray-800">fetchMessage</span>());
-                    </div>
-                    <div>
-                      <span className="text-blue-600">const</span>{" "}
-                      <span className="text-gray-800">user</span> ={" "}
-                      <span className="text-purple-600">use</span>(
-                      <span className="text-gray-800">fetchUser</span>());
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {/* Explanation Section */}
+          <section className="mt-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+              <div className="w-6 h-6 bg-purple-500 rounded mr-3"></div>
+              How the use() Hook Works
+            </h2>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <h3 className="font-semibold text-gray-800 mb-2 flex items-center">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                    Source Code Files
-                  </h3>
-                  <div className="text-sm text-gray-600 space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-mono bg-gray-100 px-2 py-1 rounded text-xs">
-                        /src/app/use/page.tsx
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="font-mono bg-gray-100 px-2 py-1 rounded text-xs">
-                        /src/components/UseAPI.tsx
-                      </span>
-                    </div>
-                  </div>
-                </div>
+            <div className="space-y-6 text-gray-700">
+              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                  Breaking Down the Example
+                </h3>
 
-                <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <h3 className="font-semibold text-gray-800 mb-2 flex items-center">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
-                    Key Benefits
-                  </h3>
-                  <ul className="text-sm text-gray-600 space-y-1">
-                    <li>• No useState needed</li>
-                    <li>• No useEffect required</li>
-                    <li>• Automatic error boundaries</li>
-                    <li>• Built-in loading states</li>
-                  </ul>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium text-gray-800 mb-2">
+                      1. The Main Page Setup
+                    </h4>
+                    <p className="text-sm">
+                      In <code>/app/page.tsx</code>, we wrap our{" "}
+                      <code>&lt;Greeting&gt;</code> component with{" "}
+                      <code>&lt;Suspense&gt;</code>. This is crucial because the{" "}
+                      <code>use()</code> hook will suspend rendering while
+                      waiting for the promise to resolve.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-gray-800 mb-2">
+                      2. The Async Function
+                    </h4>
+                    <p className="text-sm">
+                      <code>fetchGreeting()</code> returns a Promise that
+                      resolves after 2 seconds with "Hello from the future!".
+                      This simulates a real API call or database query.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-gray-800 mb-2">
+                      3. The Magic of use()
+                    </h4>
+                    <p className="text-sm">
+                      <code>const message = use(fetchGreeting());</code> - This
+                      single line pauses the component's rendering until the
+                      promise resolves. No useState, no useEffect, no loading
+                      state management needed!
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-gray-800 mb-2">
+                      4. The User Experience
+                    </h4>
+                    <p className="text-sm">
+                      While waiting, users see "Loading message..." (the
+                      Suspense fallback). Once resolved, the component renders
+                      with the actual message.
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -209,16 +205,30 @@ export default function UsePage() {
                   </div>
                   <div className="ml-3">
                     <h4 className="text-sm font-semibold text-blue-800 mb-1">
-                      💡 Pro Tip
+                      💡 Key Advantages
                     </h4>
-                    <p className="text-sm text-blue-700">
-                      The{" "}
-                      <code className="bg-blue-100 px-1 rounded font-mono">
-                        use()
-                      </code>{" "}
-                      hook works best when wrapped with Suspense boundaries for
-                      optimal user experience and error handling.
-                    </p>
+                    <ul className="text-sm text-blue-700 space-y-1">
+                      <li>
+                        • <strong>Simplified code:</strong> No useState or
+                        useEffect needed for async operations
+                      </li>
+                      <li>
+                        • <strong>Declarative loading:</strong> Suspense handles
+                        loading states automatically
+                      </li>
+                      <li>
+                        • <strong>Error handling:</strong> Errors are caught by
+                        nearest error boundary
+                      </li>
+                      <li>
+                        • <strong>Conditional usage:</strong> Unlike other
+                        hooks, use() can be called conditionally
+                      </li>
+                      <li>
+                        • <strong>Direct value access:</strong> Get resolved
+                        data immediately without state management
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
