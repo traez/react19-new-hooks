@@ -1,21 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 
 const items = Array.from({ length: 10000 }, (_, i) => `Item ${i + 1}`);
 
-const UseTransitionNoSuspense: React.FC = () => {
+const UseTransition: React.FC = () => {
   const [input, setInput] = useState("");
   const [filteredItems, setFilteredItems] = useState<string[]>(items);
+  const [isPending, startTransition] = useTransition();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInput(value);
 
-    // Directly update filteredItems immediately (no useTransition)
-    const filtered = items.filter((item) =>
-      item.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredItems(filtered);
+    startTransition(() => {
+      const filtered = items.filter((item) =>
+        item.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    });
   };
 
   return (
@@ -27,6 +29,9 @@ const UseTransitionNoSuspense: React.FC = () => {
         placeholder="Search..."
         className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+      {isPending && (
+        <p className="mt-2 text-sm text-gray-500 animate-pulse">Loading...</p>
+      )}
       <ul className="mt-4 max-h-[500px] overflow-y-auto space-y-1">
         {filteredItems.map((item, i) => (
           <li key={i} className="p-2 border-b border-gray-100 hover:bg-gray-50">
@@ -38,4 +43,4 @@ const UseTransitionNoSuspense: React.FC = () => {
   );
 };
 
-export default UseTransitionNoSuspense;
+export default UseTransition;

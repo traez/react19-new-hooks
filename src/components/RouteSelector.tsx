@@ -1,6 +1,8 @@
 "use client";
-import { useRouter, usePathname } from "next/navigation";
+import {  usePathname } from "next/navigation";
+//import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "nextjs-toploader/app";
 
 const routes = [
   { path: "/", label: "Home" },
