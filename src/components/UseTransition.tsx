@@ -1,41 +1,48 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 
-const items = Array.from({ length: 10000 }, (_, i) => `Item ${i + 1}`);
-
-const UseTransitionNoSuspense: React.FC = () => {
-  const [input, setInput] = useState("");
-  const [filteredItems, setFilteredItems] = useState<string[]>(items);
+function App() {
+  const [name, setName] = useState<string>("");
+  const [lists, setLists] = useState<string[]>([]);
+  const [isPending, startTransition] = useTransition();
+  const LIST_SIZE = 10000;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setInput(value);
+    setName(value);
 
-    // Directly update filteredItems immediately (no useTransition)
-    const filtered = items.filter((item) =>
-      item.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredItems(filtered);
+    startTransition(() => {
+      const dataList: string[] = [];
+      for (let i = 0; i < LIST_SIZE; i++) {
+        dataList.push(value);
+      }
+      setLists(dataList);
+    });
   };
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
+    <div className="p-4 max-w-xl mx-auto space-y-4">
       <input
         type="text"
-        value={input}
+        value={name}
         onChange={handleChange}
-        placeholder="Search..."
-        className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Type something..."
+        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <ul className="mt-4 max-h-[500px] overflow-y-auto space-y-1">
-        {filteredItems.map((item, i) => (
-          <li key={i} className="p-2 border-b border-gray-100 hover:bg-gray-50">
-            {item}
-          </li>
-        ))}
-      </ul>
+
+      <div className="h-[400px] overflow-y-auto border rounded p-2 bg-white">
+        {isPending ? (
+          <div className="text-center text-gray-500">Loading...</div>
+        ) : (
+          lists.map((list, index) => (
+            <div key={index} className="text-sm text-gray-700">
+              {list}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
-};
+}
 
-export default UseTransitionNoSuspense;
+export default App;
