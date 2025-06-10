@@ -163,8 +163,8 @@ export async function submitForm(formData: FormData) {
                 <strong>Important:</strong> The useFormStatus Hook must be
                 called from a component that is rendered inside a{" "}
                 <code>&lt;form&gt;</code>. It provides real-time information
-                about the form's submission state without requiring manual state
-                management.
+                about the form&apos;s submission state without requiring manual
+                state management.
               </p>
               <p>
                 <strong>When to use useFormStatus:</strong>
@@ -236,10 +236,10 @@ export async function submitForm(formData: FormData) {
                         const {"{ pending, data, method, action }"} =
                         useFormStatus();
                       </code>{" "}
-                      must be called inside a component that's rendered within a
-                      form. In our example, the <code>SubmitButton</code>{" "}
-                      component uses this hook to track the parent form's
-                      submission status.
+                      must be called inside a component that&apos;s rendered
+                      within a form. In our example, the{" "}
+                      <code>SubmitButton</code> component uses this hook to
+                      track the parent form&apos;s submission status.
                     </p>
                   </div>
 
@@ -360,7 +360,7 @@ export async function submitForm(formData: FormData) {
                       </li>
                       <li>
                         • <strong>method:</strong> HTTP method being used for
-                        the submission (usually "post")
+                        the submission (usually &quot;post&quot;)
                       </li>
                       <li>
                         • <strong>action:</strong> Reference to the action
@@ -399,7 +399,9 @@ export async function submitForm(formData: FormData) {
                         • Cannot be used in the same component that renders the
                         &lt;form&gt;
                       </li>
-                      <li>• Only tracks the parent form's submission status</li>
+                      <li>
+                        • Only tracks the parent form&apos;s submission status
+                      </li>
                       <li>
                         • Returns null values when no form submission is active
                       </li>
