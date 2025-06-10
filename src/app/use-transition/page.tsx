@@ -107,16 +107,9 @@ export default App;`;
                   </li>
                 </ul>
                 <p className="text-amber-700 bg-amber-50 p-3 rounded border border-amber-200">
-                  <strong>⚠️ Important:</strong> Use this hook sparingly. Only
-                  use it when experiencing performance issues and other
-                  optimization techniques aren&apos;t sufficient. Overuse can
-                  actually hurt performance by preventing React from properly
-                  batching updates.
-                  <br />
-                  <b>
-                    It’s somewhat like the use API in functionality, and
-                    likewise IMHO isn’t a very useful React feature overall.
-                  </b>
+                  <strong>⚠️ Important:</strong>
+                  It’s somewhat like the use API in functionality, and likewise
+                  IMHO isn’t a very useful React feature overall.
                 </p>
               </div>
             </aside>
