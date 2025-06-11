@@ -17,9 +17,17 @@ export default function CodeHighlighter({
 
   useEffect(() => {
     if (codeRef.current) {
-      hljs.highlightElement(codeRef.current);
+      try {
+        // Use hljs.highlight() instead of hljs.highlightElement()
+        const highlighted = hljs.highlight(code, { language });
+        codeRef.current.innerHTML = highlighted.value;
+      } catch {
+        // Fallback to auto-detection if language is not recognized
+        const highlighted = hljs.highlightAuto(code);
+        codeRef.current.innerHTML = highlighted.value;
+      }
     }
-  }, [code]);
+  }, [code, language]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code).then(() => {
@@ -31,8 +39,8 @@ export default function CodeHighlighter({
   return (
     <div className="relative mx-auto">
       <pre className="whitespace-pre">
-        <code ref={codeRef} className={language}>
-          {code}
+        <code ref={codeRef} className={`hljs ${language}`}>
+          {/* Content will be set by useEffect */}
         </code>
       </pre>
 
@@ -46,7 +54,6 @@ export default function CodeHighlighter({
     </div>
   );
 }
-
 
 /* 
 How to see all available styles:
