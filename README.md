@@ -1,6 +1,6 @@
 # React19-Newhooks-Fingerprintjs
 
-Sandbox app for React 19 new hooks and Fingerprintjs simulation
+A hobby app focused on showing code for some new React 19 Hooks/APIs and testing out browser fingerprinting technology.
 
 ## Table of contents
 
@@ -20,7 +20,7 @@ Sandbox app for React 19 new hooks and Fingerprintjs simulation
 
 ### The Challenge/User Stories
 
-The goal of this project was to create a modern, scalable web application using PayloadCMS and Next.js 15. Users needed a seamless experience managing content through a developer-first CMS while interacting with a fast, responsive frontend. The app had to support secure form submissions (including file uploads), efficient content management, and real-time updates—ideal for building apps like a Todo manager or contact platform. This solution empowers developers to rapidly integrate PayloadCMS into new or existing projects with clean architecture and ease of customization.
+The goal was to build a client-side fingerprinting app that collects detailed device, browser, and network information while respecting user consent. Users can view real-time data on their device specs, network identity, and visitor metrics. When consent is given, the app enriches the fingerprint with anonymized IP-based location data. Users should also be able to navigate between different demo pages showcasing React hooks like useTransition, useRef, and others, while keeping state management clean via Zustand. Error handling, loading states, and a smooth UI experience were also key priorities to make the fingerprint collection transparent and user-friendly.
 
 ### Screenshot
 
@@ -28,8 +28,8 @@ The goal of this project was to create a modern, scalable web application using 
 
 ### Links
 
-- Solution URL: [https://github.com/traez/payload-headless-cms3](https://github.com/traez/payload-headless-cms3)
-- Live Site URL: [https://payload-headless-cms3.vercel.app/](https://payload-headless-cms3.vercel.app/)
+- Solution URL: [https://github.com/traez/react19-newhooks-fingerprintjs](https://github.com/traez/react19-newhooks-fingerprintjs)
+- Live Site URL: [https://react19-newhooks-fingerprintjs.vercel.app/](https://react19-newhooks-fingerprintjs.vercel.app/)
 
 ## My process
 
@@ -43,74 +43,124 @@ The goal of this project was to create a modern, scalable web application using 
 - [Next.js](https://nextjs.org/) - React framework
 - Typescript
 - Nodejs
-- Tailwind CSS  
-- payload  
-- nextjs-toploader  
-- sharp  
+- Tailwind CSS
+- highlight.js
+- nextjs-toploader
+- react-icons
+- sonner
+- zustand
 
 ### What I learned
 
-**1 Next.js Routing**   
-**Route Groups**: Folders with parentheses like `/(age)` create Route Groups that organize your folder structure without affecting the URL path
-Route groups help you organize routes, create specific layouts, and split your application into logical sections
-Example: `/(age)/about` still appears as `/about` in the URL  
+**1 Code Syntax Highlighting in React.js**  
+For code snippet syntax highlighting in React.js, you can use `<code>`, `<kbd>`, and `<pre>` elements with Tailwind styling for basic needs. However, for professional applications, consider using [highlight.js](https://highlightjs.org/) for more robust syntax highlighting capabilities.
 
-**2 Installation Best Practices**  
-**Start Fresh**: Avoid adding Payload to an existing Next.js app as it requires many error-prone setting adjustments. Always start with a fresh Payload installation that embeds itself in a Next.js app.  
-**Package Managers**: PayloadCMS uses npx for initial setup, then pnpm for development work. Adhering to this standard provides the best developer experience.  
-**PostgreSQL with Supabase**: When using Supabase, connect through the Transaction Pooler (port 6543). The direct connection (port 5432) doesn't work properly.  
+**2 React 19's `use()` API**  
+The `use()` API is a new React 19 feature that allows you to wait for a Promise directly inside a component without needing `useEffect`, `useState`, or manual loading state management . It "pauses" rendering until the Promise resolves, then continues with the result. The primary objective of this API is to control loading and error states while retrieving data seamlessly.
 
-**3 Setup Procedure**  
-1 Run `npx create-payload-app` to start (this replaces `npx create-next-app@latest my-next-app`), which gives you a Next.js app optimized for Payload.  
-2 During installation, select your necessary options.  
-3 Add your Supabase project connection string. Compulsorily from a new project as it will wipe and rewrite database.  
-4 Open the project and run `pnpm run dev` to complete the first table migration.  
-5 Add Tailwind CSS manually following the documentation, but use the existing styles.css instead of globals.css.  
+**3 Server-Side API Calls in Next.js**  
+In Next.js (especially with the App Router), it's best practice to run API calls server-side via route handlers whenever possible. This approach:
 
-**4 Project Structure**  
-`(frontend)` and `(payload)` route groups separate frontend and backend concerns
-`/admin` route is where clients log in when you're working as a web developer/freelancer
-**Collections**: Groups of records (Documents) that share a common schema, stored in the database based on defined Fields
+- Keeps sensitive logic and tokens secure
+- Reduces client-side bundle size
+- Avoids exposing third-party APIs to the browser
+- Enables better caching and centralized data handling
+- Makes frontend components cleaner and faster
 
-**5 Dependencies**  
-**Transitive Dependencies**: Some packages (like Drizzle) are available in your project even without being listed in package.json because they're required by explicitly included packages
-Example: `@payloadcms/db-postgres` automatically brings in Drizzle-related packages  
-**Key Dependencies**:
-- `sharp` (0.32.6): High-performance image processing library for handling image uploads and resizing. Necessary when using Next Image component and deploying on platforms outside Vercel.
-- `cross-env` (^7.0.3): Allows defining environment variables across different OS platforms
+**4 When Client-Side API Calls Are Necessary**  
+While server-side API calls are preferred, client-side calls are necessary when:
 
-**6 Docker Integration**   
-Docker files are part of the deployment infrastructure, separate from application dependencies
-GitHub detects Dockerfiles as a distinct language, but they are not runtime dependencies
-In development, you can work without Docker, but for production, `docker build` creates an optimized image
+- Working with browser-specific features (geolocation, local storage)
+- Using third-party SDKs that only run in the browser
+- Accessing session data only available client-side
+- Handling real-time updates
+- Fetching public data where security isn't a concern
 
-**7 Tailwind CSS V4**  
-`wrap-break-word` in Tailwind 4 is equivalent to `break-words` in Tailwind 3. Same for many other Tailwind utility classes. Always confirm. 
+**5 Hiding Sensitive Logic with Next.js API Routes**  
+**Best Practice Summary:**
 
-**8 Next.js App Router Features**  
-Use `revalidatePath('/')` and `redirect('/')` for navigation and cache management
-Import redirect with: `import { redirect } from "next/navigation"`
+- ✅ Put non-trivial logic in API routes if it's not meant for the browser
+- ✅ Don't expose secret keys, third-party APIs, or proprietary algorithms to the frontend
+- ✅ Leverage the App Router's server-handling features for optimal security
 
-**9 Data Access Approaches**  
-In dynamic routes (e.g., `todos/[id]/page.tsx`), you can use either Payload API or REST API:
-- **Payload API (Direct)**: Preferred for server-side operations, offering better performance without HTTP overhead
-- **REST API**: Best for client-side code, maintaining clear separation between frontend and backend
+**6 Dynamic Route Handling**  
+Use `export const dynamic = 'force-dynamic'` in `route.ts` when your route depends on request-specific data such as:
 
-**10 Configuring Vercel Blob Storage with Payload CMS**  
-## Key Resources
-- [Payload CMS Storage Adapters Documentation](https://payloadcms.com/docs/upload/storage-adapters)
-- [How to Configure File Storage in Payload with Vercel Blob, R2, and Uploadthing](https://payloadcms.com/posts/guides/how-to-configure-file-storage-in-payload-with-vercel-blob-r2-and-uploadthing)
-- [Vercel Blob Documentation](https://vercel.com/docs/vercel-blob)
+- User's IP address, cookies, headers, or authentication details
+- Real-time or frequently changing data
+- Routes that perform side effects (logging, analytics, tracking)
 
-## Important Steps
-1. Install the adapter: `pnpm add @payloadcms/storage-vercel-blob`
-2. **Critical**: Run `pnpm generate:importmap` after installation
-3. Without this, you'll get: "Payload CMS can't find the VercelBlobClientUploadHandler component in its import map"
-4. This applies to all Payload plugins (`@payloadcms/plugin-form-builder`, etc.)
-5. Configure in your Payload config file with your `BLOB_READ_WRITE_TOKEN`
+This ensures the route runs fresh on the server for every request, bypassing static caching.
 
-**11 Troubleshooting**  
-For build errors like "UnhandledSchemeError: Reading from 'cloudflare:sockets' is not handled by plugins", check the workaround in [GitHub issue #12197](https://github.com/payloadcms/payload/issues/12197#issuecomment-2869524711)
+**7 Environment Variables in Next.js**  
+The `process.env.NODE_ENV` variable is a built-in Node.js/Next.js variable that automatically reflects your app's runtime mode:
+
+- `"development"` during local development (`next dev`)
+- `"production"` when built for deployment (`next build && next start`)
+- `"test"` during testing
+
+No `.env` configuration is required for this variable.
+
+**8 SHA-256 Hashing**  
+SHA-256 is a secure hashing algorithm that creates a 256-bit (32-byte) hash from any input, commonly used for data integrity verification or secure password storage. In Next.js apps, you can use it server-side via Node.js's built-in `crypto` module without additional libraries.
+
+**9 Tailwind CSS Theme Variables**  
+Theme variables are special CSS variables defined using the `@theme` directive that determine which utility classes exist in your project:
+
+```css
+@import "tailwindcss";
+@theme {
+  /* Custom color */
+  --color-mint-500: oklch(0.72 0.11 178);
+  /* Custom spacing */
+  --spacing-xs: 0.5rem;
+  /* Custom font family */
+  --font-family-sans: "Inter Variable", sans-serif;
+}
+```
+
+This enables utility classes like `bg-mint-500`, `text-mint-500`, or `fill-mint-500`.  
+Spacing utilities like `p-xs`, `m-xs`, or `gap-xs`.  
+Font utilities `font-sans`.  
+
+For theme variables that reference other variables, use the inline option:
+
+```css
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-trebuchetMs: "Trebuchet MS";
+}
+```
+
+**10 Custom Base Styles in Tailwind**  
+To add your own default base styles for specific HTML elements, use the `@layer` directive:
+
+```css
+@layer base {
+  h1 {
+    font-size: var(--text-2xl);
+  }
+  code {
+    font-family: monospace;
+    background: #e0e0e0;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+  }
+}
+```
+
+**11 Sonner Toast Library - Dynamic Updates**  
+The [Sonner toast library](https://sonner.emilkowal.ski/other) lets you create and update toast notifications dynamically using unique IDs. In the example, a loading toast (`toast.loading`) is shown while an action is in progress. Later, the same toast is updated to either a success (`toast.success`) or error (`toast.error`) state by passing the original `toastId`. This approach ensures a smooth transition instead of creating multiple toasts. It's especially useful for async operations, providing a clean way to show progress and results without cluttering the UI.
+
+```javascript
+const toastId = toast.loading("Adding todo...");
+// Later update the same toast
+toast.success("Todo added successfully!", { id: toastId });
+// Or on error
+toast.error("Failed to add todo. Please try again.", { id: toastId });
+```
+
+This pattern is ideal for async operations, providing clean progress feedback without UI clutter.
 
 ### Continued development
 
