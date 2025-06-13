@@ -118,7 +118,7 @@ Theme variables are special CSS variables defined using the `@theme` directive t
 }
 ```
 
-This enables utility classes like `bg-mint-500`, `text-mint-500`, or `fill-mint-500`.  
+This enables utility classes like `bg-mint-500`, `text-mint-500`, `border-mint-500`, `divide-mint-500`, `outline-mint-500`, or `fill-mint-500`.  
 Spacing utilities like `p-xs`, `m-xs`, or `gap-xs`.  
 Font utilities `font-sans`.  
 
