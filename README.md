@@ -46,7 +46,6 @@ The goal was to build a client-side fingerprinting app that collects detailed de
 - Tailwind CSS
 - highlight.js
 - nextjs-toploader
-- react-icons
 - sonner
 - zustand
 
